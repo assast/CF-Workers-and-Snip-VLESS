@@ -5,8 +5,8 @@ let yourUUID = '69a33565-c524-4c8d-b46b-0eb7df43fa36';  // UUID
 
 // CDN 
 let cfip = [ // 格式:优选域名:端口#备注名称、优选IP:端口#备注名称、[ipv6优选]:端口#备注名称、优选域名#备注 
-    'cname.jvvv.de','mfa.gov.ua#SG', 'saas.sin.fan#HK', 'store.ubi.com#JP','cf.130519.xyz#KR','cf.008500.xyz#HK', 
-    'cf.090227.xyz#SG', 'cf.877774.xyz#HK','cdns.doon.eu.org#JP','sub.danfeng.eu.org#TW','cf.zhetengsha.eu.org#HK'
+    'cname.jvvv.de#我的优选','mfa.gov.ua#mfa.gov.ua-SG', 'saas.sin.fan#saas.sin.fan-HK', 'store.ubi.com#store.ubi.com-JP','cf.130519.xyz#130519-KR','cf.008500.xyz#008500-HK', 
+    'cf.090227.xyz#090227-SG', 'cf.877774.xyz#877774-HK','cdns.doon.eu.org#doon-JP','sub.danfeng.eu.org#danfeng-TW','cf.zhetengsha.eu.org#zhetengsha-HK'
 ];  // 在此感谢各位大佬维护的优选域名
 
 function getHomePageHTML(currentDomain) {
@@ -196,25 +196,28 @@ export default {
                     const currentDomain = url.hostname;
                     const header = 'v' + 'l' + 'e' + 's' + 's';
                     const nodeLinks = cfip.map(cdnItem => {
-                        let host, port = 443;
-                        const nodeName = cdnItem;
-                        let cdnItemForParsing = cdnItem;
-                        
-                        if (cdnItemForParsing.includes('#')) {
-                            cdnItemForParsing = cdnItemForParsing.split('#')[0];
+                        let host, port = 443, nodeName = '';
+                        if (cdnItem.includes('#')) {
+                            const parts = cdnItem.split('#');
+                            cdnItem = parts[0];
+                            nodeName = parts[1];
                         }
 
-                        if (cdnItemForParsing.startsWith('[') && cdnItemForParsing.includes(']:')) {
-                            const ipv6End = cdnItemForParsing.indexOf(']:');
-                            host = cdnItemForParsing.substring(0, ipv6End + 1); 
-                            const portStr = cdnItemForParsing.substring(ipv6End + 2); 
+                        if (cdnItem.startsWith('[') && cdnItem.includes(']:')) {
+                            const ipv6End = cdnItem.indexOf(']:');
+                            host = cdnItem.substring(0, ipv6End + 1); 
+                            const portStr = cdnItem.substring(ipv6End + 2); 
                             port = parseInt(portStr) || 443;
-                        } else if (cdnItemForParsing.includes(':')) {
-                            const parts = cdnItemForParsing.split(':');
+                        } else if (cdnItem.includes(':')) {
+                            const parts = cdnItem.split(':');
                             host = parts[0];
                             port = parseInt(parts[1]) || 443;
                         } else {
-                            host = cdnItemForParsing;
+                            host = cdnItem;
+                        }
+                        
+                        if (!nodeName) {
+                            nodeName = host;
                         }
 
                         return `${header}://${yourUUID}@${host}:${port}?encryption=none&security=tls&sni=${currentDomain}&fp=firefox&allowInsecure=1&type=ws&host=${currentDomain}&path=%2F%3Fed%3D2560#${nodeName}`;
