@@ -5,8 +5,8 @@ let yourUUID = '69a33565-c524-4c8d-b46b-0eb7df43fa36';  // UUID
 
 // CDN 
 let cfip = [ // 格式:优选域名:端口#备注名称、优选IP:端口#备注名称、[ipv6优选]:端口#备注名称、优选域名#备注 
-    'cname.jvvv.de#我的优选','mfa.gov.ua#mfa.gov.ua-SG', 'saas.sin.fan#saas.sin.fan-HK', 'store.ubi.com#store.ubi.com-JP','cf.130519.xyz#130519-KR','cf.008500.xyz#008500-HK', 
-    'cf.090227.xyz#090227-SG', 'cf.877774.xyz#877774-HK','cdns.doon.eu.org#doon-JP','sub.danfeng.eu.org#danfeng-TW','cf.zhetengsha.eu.org#zhetengsha-HK'
+    'cname.jvvv.de#myself','mfa.gov.ua#mfa.gov.ua', 'saas.sin.fan#saas.sin.fan', 'store.ubi.com#store.ubi.com','cf.130519.xyz#130519','cf.008500.xyz#008500', 
+    'cf.090227.xyz#090227', 'cf.877774.xyz#877774','cdns.doon.eu.org#doon','sub.danfeng.eu.org#danfeng','cf.zhetengsha.eu.org#zhetengsha'
 ];  // 在此感谢各位大佬维护的优选域名
 
 function getHomePageHTML(currentDomain) {
