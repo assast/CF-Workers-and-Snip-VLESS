@@ -1,11 +1,11 @@
 import { connect } from 'cloudflare:sockets';
 
 let proxyIP = '210.61.97.241:81';  // proxyIP
-let yourUUID = '93bf61d9-3796-44c2-9b3a-49210ece2585';  // UUID
+let yourUUID = '69a33565-c524-4c8d-b46b-0eb7df43fa36';  // UUID
 
 // CDN 
 let cfip = [ // 格式:优选域名:端口#备注名称、优选IP:端口#备注名称、[ipv6优选]:端口#备注名称、优选域名#备注 
-    'mfa.gov.ua#SG', 'saas.sin.fan#HK', 'store.ubi.com#JP','cf.130519.xyz#KR','cf.008500.xyz#HK', 
+    'cname.jvvv.de','mfa.gov.ua#SG', 'saas.sin.fan#HK', 'store.ubi.com#JP','cf.130519.xyz#KR','cf.008500.xyz#HK', 
     'cf.090227.xyz#SG', 'cf.877774.xyz#HK','cdns.doon.eu.org#JP','sub.danfeng.eu.org#TW','cf.zhetengsha.eu.org#HK'
 ];  // 在此感谢各位大佬维护的优选域名
 
@@ -196,28 +196,25 @@ export default {
                     const currentDomain = url.hostname;
                     const header = 'v' + 'l' + 'e' + 's' + 's';
                     const nodeLinks = cfip.map(cdnItem => {
-                        let host, port = 443, nodeName = '';
-                        if (cdnItem.includes('#')) {
-                            const parts = cdnItem.split('#');
-                            cdnItem = parts[0];
-                            nodeName = parts[1];
+                        let host, port = 443;
+                        const nodeName = cdnItem;
+                        let cdnItemForParsing = cdnItem;
+                        
+                        if (cdnItemForParsing.includes('#')) {
+                            cdnItemForParsing = cdnItemForParsing.split('#')[0];
                         }
 
-                        if (cdnItem.startsWith('[') && cdnItem.includes(']:')) {
-                            const ipv6End = cdnItem.indexOf(']:');
-                            host = cdnItem.substring(0, ipv6End + 1); 
-                            const portStr = cdnItem.substring(ipv6End + 2); 
+                        if (cdnItemForParsing.startsWith('[') && cdnItemForParsing.includes(']:')) {
+                            const ipv6End = cdnItemForParsing.indexOf(']:');
+                            host = cdnItemForParsing.substring(0, ipv6End + 1); 
+                            const portStr = cdnItemForParsing.substring(ipv6End + 2); 
                             port = parseInt(portStr) || 443;
-                        } else if (cdnItem.includes(':')) {
-                            const parts = cdnItem.split(':');
+                        } else if (cdnItemForParsing.includes(':')) {
+                            const parts = cdnItemForParsing.split(':');
                             host = parts[0];
                             port = parseInt(parts[1]) || 443;
                         } else {
-                            host = cdnItem;
-                        }
-                        
-                        if (!nodeName) {
-                            nodeName = `Snippets-${header}`;
+                            host = cdnItemForParsing;
                         }
 
                         return `${header}://${yourUUID}@${host}:${port}?encryption=none&security=tls&sni=${currentDomain}&fp=firefox&allowInsecure=1&type=ws&host=${currentDomain}&path=%2F%3Fed%3D2560#${nodeName}`;
